@@ -6,11 +6,14 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			mc:Ignorable="d">
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<TextBlock Text="StrubT Drag &amp; Drop Agenda" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" FontWeight="Bold" />
+		<local:AgendaWeek Grid.Row="1" />
 	</Grid>
-	<Page.BottomAppBar>
-		<CommandBar>
-			<AppBarButton Content="asdf" />
-		</CommandBar>
-	</Page.BottomAppBar>
 </Page>

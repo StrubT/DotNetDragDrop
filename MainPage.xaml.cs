@@ -25,18 +25,11 @@ namespace StrubT.BFH.DotNet.DragDrop {
 			InitializeComponent();
 		}
 
-
 		protected async override void OnNavigatedTo(NavigationEventArgs e) {
 			base.OnNavigatedTo(e);
 
 			StorageFile = await ApplicationData.Current.RoamingFolder.CreateFileAsync(StorageFileName, CreationCollisionOption.OpenIfExists);
 			Store = await Store.LoadAsync(StorageFile);
-		}
-
-		protected async override void OnNavigatingFrom(NavigatingCancelEventArgs e) {
-			base.OnNavigatingFrom(e);
-
-			await Store.Save(StorageFile);
 		}
 	}
 }
