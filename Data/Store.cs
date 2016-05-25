@@ -10,9 +10,9 @@ namespace StrubT.BFH.DotNet.DragDrop.Data {
 
 		static JsonSerializer Serializer { get; } = new JsonSerializer();
 
-		ICollection<Category> Categories { get; }
+		public ICollection<Category> Categories { get; }
 
-		ICollection<Appointment> Appointments { get; }
+		public ICollection<Appointment> Appointments { get; }
 
 		Store(ICollection<Category> categories, ICollection<Appointment> appointments) {
 

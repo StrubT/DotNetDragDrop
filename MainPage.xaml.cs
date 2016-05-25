@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StrubT.BFH.DotNet.DragDrop.Data;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -11,6 +12,8 @@ namespace StrubT.BFH.DotNet.DragDrop {
 
 		public static string StorageFileName { get; } = "data.json";
 
+		public static DependencyProperty AppointmentsProperty { get; } = DependencyProperty.Register(nameof(Appointments), typeof(ICollection<Appointment>), typeof(MainPage), new PropertyMetadata(new List<Appointment>());
+
 		public static DependencyProperty StoreProperty { get; } = DependencyProperty.Register(nameof(Store), typeof(Store), typeof(MainPage), new PropertyMetadata(new Store()));
 
 		StorageFile StorageFile { get; set; }
@@ -19,6 +22,8 @@ namespace StrubT.BFH.DotNet.DragDrop {
 			get { return (Store)GetValue(StoreProperty); }
 			set { SetValue(StoreProperty, value); }
 		}
+
+		public ICollection<Appointment> Appointments => Store.Appointments;
 
 		public MainPage() {
 
