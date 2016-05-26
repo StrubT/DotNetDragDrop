@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace StrubT.BFH.DotNet.DragDrop {
 
-	public sealed partial class MainPage : Page {
+	public sealed partial class MainPage {
 
 		public static string StorageFileName { get; } = "data.json";
 

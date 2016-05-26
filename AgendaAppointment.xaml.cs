@@ -2,7 +2,7 @@
 
 namespace StrubT.BFH.DotNet.DragDrop {
 
-	public sealed partial class AgendaAppointment : UserControl {
+	public sealed partial class AgendaAppointment {
 
 		public AgendaAppointment() {
 
