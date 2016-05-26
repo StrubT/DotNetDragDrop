@@ -1,4 +1,4 @@
-﻿<Page x:Name="MainPage"
+﻿<Page x:Name="MainPageElement"
 			x:Class="StrubT.BFH.DotNet.DragDrop.MainPage"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15,6 +15,6 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<TextBlock Text="StrubT Drag &amp; Drop Agenda" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" FontWeight="Bold" />
-		<local:AgendaWeek Grid.Row="1" DataContext="{Binding ElementName=MainPage, Path=Appointments}" />
+		<local:AgendaWeek Grid.Row="1" DataContext="{Binding ElementName=MainPageElement, Path=Appointments}" />
 	</Grid>
 </Page>
