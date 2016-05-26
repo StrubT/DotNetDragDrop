@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using StrubT.BFH.DotNet.DragDrop.Data;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,9 +12,22 @@ namespace StrubT.BFH.DotNet.DragDrop {
 
 	public sealed partial class AgendaWeek : IAgendaControl {
 
+		public static string StorageFileName { get; } = "data.json";
+
 		public static DependencyProperty RowsPerHourProperty { get; } = DependencyProperty.Register(nameof(RowsPerHour), typeof(int), typeof(AgendaWeek), new PropertyMetadata(2));
 
 		public static DependencyProperty StartDateProperty { get; } = DependencyProperty.Register(nameof(StartDate), typeof(DateTime), typeof(AgendaWeek), new PropertyMetadata(GetFirstDayOfWeek(DateTime.Today)));
+
+		public static DependencyProperty StoreProperty { get; } = DependencyProperty.Register(nameof(Store), typeof(Store), typeof(MainPage), new PropertyMetadata(new Store()));
+
+		public static DependencyProperty AppointmentsProperty { get; } = DependencyProperty.Register(nameof(Appointments), typeof(ICollection<Appointment>), typeof(MainPage), new PropertyMetadata(new List<Appointment>()));
+
+		StorageFile StorageFile { get; set; }
+
+		public Store Store {
+			get { return (Store)GetValue(StoreProperty); }
+			set { SetValue(StoreProperty, value); }
+		}
 
 		public int RowsPerHour {
 			get { return (int)GetValue(RowsPerHourProperty); }
@@ -27,13 +43,23 @@ namespace StrubT.BFH.DotNet.DragDrop {
 
 		public DateTime EndDate => StartDate.AddDays(7);
 
+		public ICollection<Appointment> Appointments => Store.Appointments;
+
 		public AgendaWeek() {
 
-			InitializeComponent();
+			InitializeStore(); //data
+
+			InitializeComponent(); //GUI
 			InitializeAgenda();
 		}
 
 		static DateTime GetFirstDayOfWeek(DateTime date) => date.AddDays((date.DayOfWeek - CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek + 7) % 7);
+
+		async void InitializeStore() {
+
+			StorageFile = await ApplicationData.Current.RoamingFolder.CreateFileAsync(StorageFileName, CreationCollisionOption.OpenIfExists);
+			Store = await Store.LoadAsync(StorageFile);
+		}
 
 		void InitializeAgenda() {
 
@@ -80,6 +106,7 @@ namespace StrubT.BFH.DotNet.DragDrop {
 				}
 			}
 		}
+
 
 		//void TextBlock_DragStarting(UIElement sender, DragStartingEventArgs args) {
 
