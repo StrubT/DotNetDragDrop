@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -44,6 +45,7 @@ namespace StrubT.BFH.DotNet.DragDrop {
 				// Create a Frame to act as the navigation context and navigate to the first page
 				rootFrame = new Frame();
 				rootFrame.NavigationFailed += OnNavigationFailed;
+				rootFrame.Navigated += OnNavigated;
 
 				if (args.PreviousExecutionState == ApplicationExecutionState.Terminated) {
 					//TODO: Load state from previously suspended application
@@ -51,6 +53,11 @@ namespace StrubT.BFH.DotNet.DragDrop {
 
 				// Place the frame in the current Window
 				Window.Current.Content = rootFrame;
+
+				// Register a handler for BackRequested events and set the
+				// visibility of the Back button
+				SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+				SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = rootFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
 			}
 
 			if (args.PrelaunchActivated == false) {
@@ -74,6 +81,12 @@ namespace StrubT.BFH.DotNet.DragDrop {
 			throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 		}
 
+		void OnNavigated(object sender, NavigationEventArgs e) {
+
+			// Each time a navigation event occurs, update the Back button's visibility
+			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+		}
+
 		/// <summary>
 		/// Invoked when application execution is being suspended.  Application state is saved
 		/// without knowing whether the application will be terminated or resumed with the contents
@@ -86,6 +99,15 @@ namespace StrubT.BFH.DotNet.DragDrop {
 			var deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity
 			deferral.Complete();
+		}
+
+		void OnBackRequested(object sender, BackRequestedEventArgs e) {
+
+			Frame rootFrame = Window.Current.Content as Frame;
+			if (rootFrame.CanGoBack) {
+				e.Handled = true;
+				rootFrame.GoBack();
+			}
 		}
 	}
 }
