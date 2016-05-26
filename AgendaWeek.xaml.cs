@@ -64,6 +64,11 @@ namespace StrubT.BFH.DotNet.DragDrop {
 		void InitializeAgenda() {
 
 			var culture = CultureInfo.CurrentCulture;
+			var nofColumns = RootGrid.ColumnDefinitions.Count;
+			var nofRows = RootGrid.RowDefinitions.Count;
+
+			//set heading width
+			SetColumnSpan(Heading, 7 + nofColumns);
 
 			//create day columns, borders & headers
 			for (var i = 0; i < 7; i++) {
@@ -73,14 +78,16 @@ namespace StrubT.BFH.DotNet.DragDrop {
 					BorderThickness = new Thickness(1.0),
 					BorderBrush = new SolidColorBrush(Colors.White)
 				};
-				SetColumn(columnBorder, i + 1);
-				SetRowSpan(columnBorder, 24 * RowsPerHour + 1);
+				SetRow(columnBorder, nofRows - 1);
+				SetRowSpan(columnBorder, 24 * RowsPerHour + nofRows - 1);
+				SetColumn(columnBorder, i + nofColumns);
 				RootGrid.Children.Add(columnBorder);
 
 				var columnHeader = new TextBlock() {
 					Text = culture.DateTimeFormat.ShortestDayNames[((int)culture.DateTimeFormat.FirstDayOfWeek + i) % 7]
 				};
-				SetColumn(columnHeader, i + 1);
+				SetRow(columnHeader, nofRows - 1);
+				SetColumn(columnHeader, i + nofColumns);
 				RootGrid.Children.Add(columnHeader);
 			}
 
@@ -92,15 +99,15 @@ namespace StrubT.BFH.DotNet.DragDrop {
 					BorderThickness = new Thickness(1.0),
 					BorderBrush = new SolidColorBrush(Colors.White)
 				};
-				SetRow(rowBorder, i + 1);
-				SetColumnSpan(rowBorder, 8);
+				SetRow(rowBorder, i + nofRows);
+				SetColumnSpan(rowBorder, 7 + nofColumns);
 				RootGrid.Children.Add(rowBorder);
 
 				if (i % RowsPerHour == 0) {
 					var rowHeader = new TextBlock() {
 						Text = DateTime.Today.Add(TimeSpan.FromHours((double)i / RowsPerHour)).ToString("t")
 					};
-					SetRow(rowHeader, i + 1);
+					SetRow(rowHeader, i + nofRows);
 					SetRowSpan(rowHeader, RowsPerHour);
 					RootGrid.Children.Add(rowHeader);
 				}

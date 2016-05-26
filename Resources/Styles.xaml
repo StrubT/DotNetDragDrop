@@ -1,5 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 										xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 										xmlns:local="using:StrubT.BFH.DotNet.DragDrop">
-	<!--...-->
+	<Style x:Name="Heading" TargetType="TextBlock">
+		<Setter Property="FontSize" Value="{ThemeResource TextStyleExtraLargeFontSize}" />
+		<Setter Property="FontWeight" Value="Bold" />
+	</Style>
+	<Style x:Name="SubHeading" TargetType="TextBlock" BasedOn="{StaticResource Heading}">
+		<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}" />
+	</Style>
 </ResourceDictionary>

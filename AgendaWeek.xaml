@@ -5,13 +5,16 @@
 						 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 						 x:Class="StrubT.BFH.DotNet.DragDrop.AgendaWeek"
 						 x:Name="RootGrid"
+						 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 						 mc:Ignorable="d"
 						 d:DesignHeight="300" d:DesignWidth="400">
 	<Grid.ColumnDefinitions>
-		<ColumnDefinition />
+		<ColumnDefinition Width="Auto" />
 	</Grid.ColumnDefinitions>
 	<Grid.RowDefinitions>
-		<RowDefinition />
+		<RowDefinition Height="Auto" />
+		<RowDefinition Height="Auto" />
 	</Grid.RowDefinitions>
-	<TextBlock x:Name="asdf" Text="Week" />
+	<TextBlock x:Name="Heading" Text="StrubT Drag &amp; Drop Agenda" Style="{StaticResource Heading}" />
+	<TextBlock Grid.Row="1" x:Name="asdf" Text="Week" />
 </Grid>

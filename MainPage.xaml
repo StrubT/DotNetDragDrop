@@ -6,15 +6,6 @@
 			x:Class="StrubT.BFH.DotNet.DragDrop.MainPage"
 			x:Name="MainPageElement"
 			mc:Ignorable="d">
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition />
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition />
-		</Grid.RowDefinitions>
-		<TextBlock Text="StrubT Drag &amp; Drop Agenda" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" FontWeight="Bold" />
-		<local:AgendaWeek Grid.Row="1" />
-	</Grid>
+	<!--<local:AgendaWeek />-->
+	<local:ToDo />
 </Page>
