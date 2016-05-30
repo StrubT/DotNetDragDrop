@@ -50,7 +50,9 @@ namespace StrubT.BFH.DotNet.DragDrop {
 				args.DragUIOverride.IsContentVisible = true;
 				args.DragUIOverride.IsGlyphVisible = true;
 
-				if (!args.Modifiers.HasFlag(DragDropModifiers.Control))
+				if (args.Modifiers.HasFlag(DragDropModifiers.Control))
+					args.AcceptedOperation = DataPackageOperation.Copy;
+				else if (args.Modifiers.HasFlag(DragDropModifiers.Shift) || args.DataView.RequestedOperation.HasFlag(DataPackageOperation.Move))
 					args.AcceptedOperation = DataPackageOperation.Move;
 				else
 					args.AcceptedOperation = DataPackageOperation.Copy;
