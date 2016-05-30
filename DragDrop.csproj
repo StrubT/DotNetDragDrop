@@ -98,7 +98,7 @@
     <Compile Include="AgendaAppointment.xaml.cs">
       <DependentUpon>AgendaAppointment.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IAgendaControl.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="AgendaWeek.xaml.cs">
       <DependentUpon>AgendaWeek.xaml</DependentUpon>
     </Compile>
@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="Data\Appointment.cs" />
     <Compile Include="Data\Category.cs" />
-    <Compile Include="Data\Store.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

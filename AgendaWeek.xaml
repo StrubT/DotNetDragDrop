@@ -7,7 +7,7 @@
 			NavigationCacheMode="Required"
 			mc:Ignorable="d"
 			d:DesignHeight="300" d:DesignWidth="400">
-	<Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" AllowDrop="True" DragOver="RootGrid_DragOver">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
@@ -15,7 +15,20 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<TextBlock x:Name="Heading" Text="StrubT Drag &amp; Drop Agenda" Style="{StaticResource Heading}" />
-		<TextBlock Grid.Row="1" x:Name="asdf" Text="Week" />
+		<Grid.Resources>
+			<Style TargetType="Border">
+				<Setter Property="BorderThickness" Value="1" />
+				<Setter Property="BorderBrush" Value="DarkGray" />
+				<Setter Property="Margin" Value="0,0,-1,-1" />
+			</Style>
+			<Style TargetType="TextBlock">
+				<Setter Property="VerticalAlignment" Value="Center" />
+				<Setter Property="HorizontalAlignment" Value="Center" />
+				<Setter Property="TextAlignment" Value="Center" />
+				<Setter Property="Padding" Value="3" />
+			</Style>
+		</Grid.Resources>
+		<TextBlock x:Name="Heading" Text="StrubT Drag &amp; Drop Agenda" Style="{StaticResource Heading}" TextAlignment="Center" Margin="0,0,0,5" />
+		<Border x:Name="WeekBorder" Grid.Row="1" BorderThickness="2" Margin="0" />
 	</Grid>
 </Page>

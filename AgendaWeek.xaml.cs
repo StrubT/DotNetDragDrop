@@ -1,154 +1,133 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using StrubT.BFH.DotNet.DragDrop.Data;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 namespace StrubT.BFH.DotNet.DragDrop {
 
-	public sealed partial class AgendaWeek : IAgendaControl {
+	public sealed partial class AgendaWeek {
 
-		public static string StorageFileName { get; } = "data.json";
-
-		public static DependencyProperty RowsPerHourProperty { get; } = DependencyProperty.Register(nameof(RowsPerHour), typeof(int), typeof(AgendaWeek), new PropertyMetadata(2));
-
-		public static DependencyProperty StartDateProperty { get; } = DependencyProperty.Register(nameof(StartDate), typeof(DateTime), typeof(AgendaWeek), new PropertyMetadata(GetFirstDayOfWeek(DateTime.Today)));
-
-		public static DependencyProperty StoreProperty { get; } = DependencyProperty.Register(nameof(Store), typeof(Store), typeof(MainPage), new PropertyMetadata(new Store()));
-
-		public static DependencyProperty AppointmentsProperty { get; } = DependencyProperty.Register(nameof(Appointments), typeof(ICollection<Appointment>), typeof(MainPage), new PropertyMetadata(new List<Appointment>()));
-
-		StorageFile StorageFile { get; set; }
-
-		public Store Store {
-			get { return (Store)GetValue(StoreProperty); }
-			set { SetValue(StoreProperty, value); }
-		}
-
-		public int RowsPerHour {
-			get { return (int)GetValue(RowsPerHourProperty); }
-			set { SetValue(RowsPerHourProperty, value); }
-		}
-
-		TimeSpan IAgendaControl.DateRange => TimeSpan.FromDays(7);
-
-		public DateTime StartDate {
-			get { return (DateTime)GetValue(StartDateProperty); }
-			set { SetValue(StartDateProperty, GetFirstDayOfWeek(value)); }
-		}
-
-		public DateTime EndDate => StartDate.AddDays(7);
-
-		public ICollection<Appointment> Appointments => Store.Appointments;
+		ICollection<Appointment> Appointments { get; } = new List<Appointment>();
 
 		public AgendaWeek() {
 
-			InitializeStore(); //data
+			InitializeData();
 
-			InitializeComponent(); //GUI
+			InitializeComponent();
 			InitializeAgenda();
 		}
 
-		static DateTime GetFirstDayOfWeek(DateTime date) => date.AddDays((date.DayOfWeek - CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek + 7) % 7);
+		void InitializeData() {
 
-		async void InitializeStore() {
+			var categoryBUAS = new Category() { Color = Colors.Blue, Name = "University" };
+			var categoryGraded = new Category() { Color = Colors.Red, Name = "Exams" };
+			var categoryPriv = new Category() { Color = Colors.Green, Name = "Private" };
 
-			StorageFile = await ApplicationData.Current.RoamingFolder.CreateFileAsync(StorageFileName, CreationCollisionOption.OpenIfExists);
-			Store = await Store.LoadAsync(StorageFile);
+			//Su
+			var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryPriv, Name = "Birthday Party", StartTime = sunday.AddHours(10), Duration = TimeSpan.FromMinutes(75) });
+
+			//Tu
+			var tuesday = sunday.AddDays(2);
+			Appointments.Add(new Appointment() { Priority = Priority.High, Category = categoryGraded, Name = "AC++, HSM4, N.321", StartTime = tuesday.AddHours(10).AddMinutes(20), Duration = TimeSpan.FromMinutes(95) });
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryBUAS, Name = "ADMg, SSA1, M.106", StartTime = tuesday.AddHours(18).AddMinutes(10), Duration = TimeSpan.FromMinutes(95) });
+			Appointments.Add(new Appointment() { Priority = Priority.Critical, Category = categoryBUAS, Name = "BaTh, Poster", StartTime = tuesday.AddHours(23), Duration = TimeSpan.Zero });
+
+			//We
+			var wednesday = sunday.AddDays(3);
+			Appointments.Add(new Appointment() { Priority = Priority.High, Category = categoryBUAS, Name = "BaTh, HSM4 / LGM5, N.552", StartTime = wednesday.AddHours(10).AddMinutes(45), Duration = TimeSpan.FromMinutes(45) });
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryBUAS, Name = "SemW, BEO1, M.106", StartTime = wednesday.AddHours(19).AddMinutes(55), Duration = TimeSpan.FromMinutes(95) });
+
+			//Th
+			var thursday = sunday.AddDays(4);
+			Appointments.Add(new Appointment() { Priority = Priority.High, Category = categoryGraded, Name = ".Net, PRM1, N.522", StartTime = thursday.AddHours(8).AddMinutes(20), Duration = TimeSpan.FromMinutes(95) });
+
+			//Fr
+			var friday = sunday.AddDays(5);
+			Appointments.Add(new Appointment() { Priority = Priority.Low, Category = categoryBUAS, Name = "WBA3, JFR1 / GZR1 / STU1, N.422", StartTime = friday.AddHours(8).AddMinutes(20), Duration = TimeSpan.FromMinutes(215) });
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryBUAS, Name = "WBA3, JFR1 / GZR1 / STU1, N.422", StartTime = friday.AddHours(12).AddMinutes(45), Duration = TimeSpan.FromMinutes(205) });
+			Appointments.Add(new Appointment() { Priority = Priority.Low, Category = categoryBUAS, Name = "WBA3, JFR1 / GZR1 / STU1, N.422", StartTime = friday.AddHours(16).AddMinutes(15), Duration = TimeSpan.FromMinutes(180) });
+
+			//Sa
+			var saturday = sunday.AddDays(6);
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryPriv, Name = "Swimming", StartTime = saturday.AddHours(9), Duration = TimeSpan.FromMinutes(120) });
+			Appointments.Add(new Appointment() { Priority = Priority.Normal, Category = categoryPriv, Name = "Tutoring, cenga1", StartTime = saturday.AddHours(14), Duration = TimeSpan.FromMinutes(120) });
 		}
 
 		void InitializeAgenda() {
 
-			var culture = CultureInfo.CurrentCulture;
-			var nofColumns = RootGrid.ColumnDefinitions.Count;
-			var nofRows = RootGrid.RowDefinitions.Count;
+			var sunday = DateTime.Today.AddDays(((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)DateTime.Today.DayOfWeek + 7) % 7);
 
-			//set heading width
-			Grid.SetColumnSpan(Heading, 7 + nofColumns);
+			var nofColumns = 7 + 1;
+			var nofRows = 24 * 2 + 2;
+
+			//set static element spans
+			Grid.SetColumnSpan(Heading, nofColumns);
+			Grid.SetColumnSpan(WeekBorder, nofColumns);
+			Grid.SetRowSpan(WeekBorder, nofRows - 1);
 
 			//create day columns, borders & headers
 			for (var i = 0; i < 7; i++) {
 				RootGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-				var columnBorder = new Border() {
-					BorderThickness = new Thickness(1.0),
-					BorderBrush = new SolidColorBrush(Colors.White)
-				};
-				Grid.SetRow(columnBorder, nofRows - 1);
-				Grid.SetRowSpan(columnBorder, 24 * RowsPerHour + nofRows - 1);
-				Grid.SetColumn(columnBorder, i + nofColumns);
+				var columnBorder = new Border();
+				Grid.SetRow(columnBorder, 1);
+				Grid.SetRowSpan(columnBorder, nofRows - 1);
+				Grid.SetColumn(columnBorder, i + 1);
 				RootGrid.Children.Add(columnBorder);
 
+				var columnDate = sunday.AddDays(i);
 				var columnHeader = new TextBlock() {
-					Text = culture.DateTimeFormat.ShortestDayNames[((int)culture.DateTimeFormat.FirstDayOfWeek + i) % 7]
+					Text = $"{columnDate:ddd}, {columnDate:d}"
 				};
-				Grid.SetRow(columnHeader, nofRows - 1);
-				Grid.SetColumn(columnHeader, i + nofColumns);
+				Grid.SetRow(columnHeader, 1);
+				Grid.SetColumn(columnHeader, i + 1);
 				RootGrid.Children.Add(columnHeader);
 			}
 
 			//create rows and one header per hour
-			for (var i = 0; i < 24 * RowsPerHour; i++) {
+			for (var i = 0; i < 24 * 2; i++) {
 				RootGrid.RowDefinitions.Add(new RowDefinition());
 
-				var rowBorder = new Border() {
-					BorderThickness = new Thickness(1.0),
-					BorderBrush = new SolidColorBrush(Colors.White)
-				};
-				Grid.SetRow(rowBorder, i + nofRows);
-				Grid.SetColumnSpan(rowBorder, 7 + nofColumns);
+				var rowBorder = new Border();
+				Grid.SetRow(rowBorder, i + 2);
+				Grid.SetRowSpan(rowBorder, i % 2 == 0 ? 2 : 1);
+				Grid.SetColumn(rowBorder, i % 2 == 0 ? 0 : 1);
+				Grid.SetColumnSpan(rowBorder, nofColumns);
 				RootGrid.Children.Add(rowBorder);
 
-				if (i % RowsPerHour == 0) {
+				if (i % 2 == 0) {
 					var rowHeader = new TextBlock() {
-						Text = DateTime.Today.Add(TimeSpan.FromHours((double)i / RowsPerHour)).ToString("t")
+						Text = DateTime.Today.Add(TimeSpan.FromHours((double)i / 2)).ToString("t")
 					};
-					Grid.SetRow(rowHeader, i + nofRows);
-					Grid.SetRowSpan(rowHeader, RowsPerHour);
+					Grid.SetRow(rowHeader, i + 2);
+					Grid.SetRowSpan(rowHeader, 2);
 					RootGrid.Children.Add(rowHeader);
 				}
 			}
+
+			//create appointments
+			foreach (var appointment in Appointments) {
+				var element = new AgendaAppointment(appointment) {
+					CanDrag = true
+				};
+				element.DragStarting += AgendaAppointment_DragStarting;
+				RootGrid.Children.Add(element);
+			}
 		}
 
+		void AgendaAppointment_DragStarting(UIElement sender, DragStartingEventArgs args) {
+			
+		}
 
-		//void TextBlock_DragStarting(UIElement sender, DragStartingEventArgs args) {
+		void RootGrid_DragOver(object sender, DragEventArgs e) {
 
-		//	args.Data.RequestedOperation = DataPackageOperation.Move;
-		//	args.Data.SetApplicationLink(new Uri("xaml-elment://"));
-		//}
-
-		//void Grid_DragOver(object sender, DragEventArgs e) {
-
-		//	if (e.DataView.Contains(StandardDataFormats.ApplicationLink))
-		//		e.AcceptedOperation = DataPackageOperation.Move;
-		//}
-
-		//void Grid_Drop(object sender, DragEventArgs e) {
-
-		//}
-
-		//<Grid Grid.Row="1" AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop">
-		//	<Grid.ColumnDefinitions>
-		//		<ColumnDefinition />
-		//		<ColumnDefinition />
-		//		<ColumnDefinition />
-		//	</Grid.ColumnDefinitions>
-		//	<Grid.RowDefinitions>
-		//		<RowDefinition />
-		//		<RowDefinition />
-		//		<RowDefinition />
-		//	</Grid.RowDefinitions>
-		//	<StackPanel Grid.Row="1">
-		//		<TextBlock Text="asdf" CanDrag="True" DragStarting="TextBlock_DragStarting" />
-		//		<TextBlock Text="temp" CanDrag="True" DragStarting="TextBlock_DragStarting" />
-		//	</StackPanel>
-		//	<StackPanel Grid.Row="1" Grid.Column="2">
-		//		<TextBlock Text="qwertz" CanDrag="True" DragStarting="TextBlock_DragStarting" />
-		//	</StackPanel>
-		//</Grid>
+		}
 	}
 }

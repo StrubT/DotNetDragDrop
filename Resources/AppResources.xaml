@@ -1,5 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 										xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 										xmlns:local="using:StrubT.BFH.DotNet.DragDrop">
-	<!--...-->
+	<local:DateTimeWeekGridColumnConverter x:Key="DateTimeWeekGridColumnConverter" />
+	<local:DateTimeWeekGridRowConverter x:Key="DateTimeWeekGridRowConverter" />
+	<local:DateTimeWeekGridRowSpanConverter x:Key="DateTimeWeekGridRowSpanConverter" />
+	<local:ColorBrushConverter x:Key="ColorBrushConverter" />
 </ResourceDictionary>
