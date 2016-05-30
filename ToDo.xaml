@@ -36,15 +36,15 @@
 			<RowDefinition Height="3*" />
 			<RowDefinition Height="1*" />
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Column="1" Grid.ColumnSpan="3" Text="StrubT Drag &amp; Drop ToDo" HorizontalAlignment="Center" Style="{StaticResource Heading}" />
-		<TextBlock Grid.Row="2" Grid.Column="1" Text="To Do" Style="{StaticResource StackPanelTitle}" />
-		<TextBlock Grid.Row="2" Grid.Column="3" Text="Done" Style="{StaticResource StackPanelTitle}" />
-		<StackPanel Grid.Row="3" Grid.Column="1" DragEnter="StackPanel_DragEnter" Drop="StackPanel_Drop">
-			<TextBlock Text="Creating Agenda" DragStarting="TextBlock_DragStarting" />
-			<TextBlock Text="Creating Presentation" DragStarting="TextBlock_DragStarting" />
+		<TextBlock x:Name="TitleBlock" Grid.Column="1" Grid.ColumnSpan="3" Text="StrubT Drag &amp; Drop ToDo" HorizontalAlignment="Center" Style="{StaticResource Heading}" />
+		<TextBlock x:Name="ToDoLabelBlock" Grid.Row="2" Grid.Column="1" Text="To Do" Style="{StaticResource StackPanelTitle}" />
+		<TextBlock x:Name="DoneLabelBlock" Grid.Row="2" Grid.Column="3" Text="Done" Style="{StaticResource StackPanelTitle}" />
+		<StackPanel x:Name="ToDoPanel" Grid.Row="3" Grid.Column="1" DragEnter="StackPanel_DragEnter" DragOver="StackPanel_DragEnter" Drop="StackPanel_Drop">
+			<TextBlock Text="Creating Agenda" DragStarting="TextBlock_DragStarting" DropCompleted="TextBlock_DropCompleted" />
+			<TextBlock Text="Creating Presentation" DragStarting="TextBlock_DragStarting" DropCompleted="TextBlock_DropCompleted" />
 		</StackPanel>
-		<StackPanel Grid.Row="3" Grid.Column="3" DragEnter="StackPanel_DragEnter" Drop="StackPanel_Drop">
-			<TextBlock Text="Creating ToDo Example" DragStarting="TextBlock_DragStarting" />
+		<StackPanel x:Name="DonePanel" Grid.Row="3" Grid.Column="3" DragEnter="StackPanel_DragEnter" DragOver="StackPanel_DragEnter" Drop="StackPanel_Drop">
+			<TextBlock Text="Creating ToDo Example" DragStarting="TextBlock_DragStarting" DropCompleted="TextBlock_DropCompleted" />
 		</StackPanel>
 	</Grid>
 </Page>
