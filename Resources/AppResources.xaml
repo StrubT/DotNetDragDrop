@@ -5,4 +5,8 @@
 	<local:DateTimeWeekGridRowConverter x:Key="DateTimeWeekGridRowConverter" />
 	<local:DateTimeWeekGridRowSpanConverter x:Key="DateTimeWeekGridRowSpanConverter" />
 	<local:ColorBrushConverter x:Key="ColorBrushConverter" />
+	<local:PrioritySymbolConverter x:Key="PrioritySymbolConverter" DefaultSymbol="Priority" />
+	<local:PriorityBrushConverter x:Key="PriorityBrushConverter" DefaultBrush="{StaticResource SystemAltLowColor}" />
+	<local:PriorityVisibilityConverter x:Key="PriorityVisibilityConverter" />
+	<local:AppointmentTimeConverter x:Key="AppointmentTimeConverter" />
 </ResourceDictionary>

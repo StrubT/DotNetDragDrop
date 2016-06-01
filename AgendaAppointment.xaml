@@ -12,5 +12,15 @@
 			Margin="1,1,0,0"
 			mc:Ignorable="d"
 			d:DesignHeight="300" d:DesignWidth="400">
-	<TextBlock Text="{Binding Appointment.Name, ElementName=AppointmentElement}" />
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition />
+		<ColumnDefinition Width="Auto" />
+	</Grid.ColumnDefinitions>
+	<Grid.RowDefinitions>
+		<RowDefinition />
+		<RowDefinition />
+	</Grid.RowDefinitions>
+	<TextBlock Text="{Binding Appointment, ElementName=AppointmentElement, Converter={StaticResource AppointmentTimeConverter}}" />
+	<SymbolIcon Grid.Column="2" Grid.RowSpan="2" Symbol="{Binding Appointment.Priority, ElementName=AppointmentElement, Converter={StaticResource PrioritySymbolConverter}}" Foreground="{Binding Appointment.Priority, ElementName=AppointmentElement, Converter={StaticResource PriorityBrushConverter}}" Visibility="{Binding Appointment.Priority, ElementName=AppointmentElement, Converter={StaticResource PriorityVisibilityConverter}}" />
+	<TextBlock Grid.Row="1" Text="{Binding Appointment.Name, ElementName=AppointmentElement}" />
 </Grid>
